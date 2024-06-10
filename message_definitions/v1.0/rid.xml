@@ -1,0 +1,151 @@
+<?xml version="1.0"?>
+<mavlink>  
+  <include>ardupilotmega.xml</include>
+  <enums>
+      <enum name="MAV_ODID_RADIO_MODE" bitmask="true">
+      <description>Flags controlling the radio mode(s) of the OpenDroneID device (bitmask)</description>
+      <entry value="1" name="MAV_ODID_RADIO_MODE_NO_CHANGE">
+        <description>No change in radio transmit/receive mode of OpenDroneID packets.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_RADIO_MODE_BLE_LEGACY">
+        <description>Transmit and/or receive OpenDroneID Bluetooth Low Energy legacy packets.</description>
+      </entry>
+      <entry value="4" name="MAV_ODID_RADIO_MODE_BLE_LONG_RANGE">
+        <description>Transmit and/or receive OpenDroneID Bluetooth Low Energy long range packets.</description>
+      </entry>
+      <entry value="8" name="MAV_ODID_RADIO_MODE_WIFI_NAN">
+        <description>Transmit and/or receive OpenDroneID WiFi Neighbor Awareness Network packets.</description>
+      </entry>
+      <entry value="16" name="MAV_ODID_RADIO_MODE_WIFI_BEACON">
+        <description>Transmit and/or receive OpenDroneID WiFi Beacon packets.</description>
+      </entry>
+    </enum>
+    <enum name="MAV_ODID_RADIO_CONTROL">
+      <entry value="0" name="MAV_ODID_RADIO_CONTROL_NO_CHANGE">
+        <description>No change in broadcast mode of OpenDroneID device.</description>
+      </entry>
+      <entry value="1" name="MAV_ODID_RADIO_CONTROL_START">
+        <description>Start transmitting/receiving OpenDroneID packets.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_RADIO_CONTROL_STOP">
+        <description>Stop transmitting/receiving OpenDroneID packets.</description>
+      </entry>
+      <entry value="3" name="MAV_ODID_RADIO_CONTROL_RESET">
+        <description>Resets/reboots the OpenDroneID radio.</description>
+      </entry>
+    </enum>
+    <enum name="MAV_ODID_REGION">
+      <description>Set the region of the RemoteID transmitter.</description>
+      <entry value="0" name="MAV_ODID_REGION_NO_CHANGE">
+        <description>No change to the configured region.</description>
+      </entry>
+      <entry value="1" name="MAV_ODID_REGION_USA">
+        <description>Set the region to the USA.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_REGION_EU">
+        <description>Set the region to the EU.</description>
+      </entry>
+      <entry value="3" name="MAV_ODID_REGION_OTHER">
+        <description>Set the region to the rest of the world, minimum checks</description>
+      </entry>     
+    </enum>
+    <enum name="MAV_ODID_RADIO_FUNCTION">
+      <entry value="0" name="MAV_ODID_RADIO_FUNCTION_NA">
+        <description>The device has no OpenDroneID functionality or it is unknown.</description>
+      </entry>
+      <entry value="1" name="MAV_ODID_RADIO_FUNCTION_TRANSMITTER">
+        <description>The device is an OpenDroneID transmitter.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_RADIO_FUNCTION_RECEIVER">
+        <description>The device is an OpenDroneID receiver.</description>
+      </entry>
+      <entry value="3" name="MAV_ODID_RADIO_FUNCTION_TRANSCEIVER">
+        <description>The device is both an OpenDroneID transmitter and receiver.</description>
+      </entry>
+    </enum>
+    <enum name="MAV_ODID_RADIO_TYPES" bitmask="true">
+      <description>Describes which radios the device has (bitmask)</description>
+      <entry value="1" name="MAV_ODID_RADIO_TYPES_BLUETOOTH_LEGACY">
+        <description>The device has Bluetooth legacy (4.x) radio support.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_RADIO_TYPES_BLUETOOTH_LONG_RANGE">
+        <description>The device has Bluetooth long range radio support.</description>
+      </entry>
+      <entry value="4" name="MAV_ODID_RADIO_TYPES_WIFI_NAN">
+        <description>The device has support for WiFi Neighbor Awareness Network.</description>
+      </entry>
+      <entry value="8" name="MAV_ODID_RADIO_TYPES_WIFI_BEACON">
+        <description>The device has support for WiFi Beacon.</description>
+      </entry>
+    </enum>
+    <enum name="MAV_ODID_RADIO_WIFI_SUPPORTED_FREQUENCY_BANDS" bitmask="true">
+      <description>Describes the specifications of the WiFi radio(s) (bitmask)</description>
+      <entry value="1" name="MAV_ODID_RADIO_WIFI_SUPPORTED_FREQUENCY_BANDS_NONE">
+        <description>The device does not have a WiFi radio.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_RADIO_WIFI_SUPPORTED_FREQUENCY_BANDS_2_4GHZ">
+        <description>The device has a WiFi radio that supports the 2.4 GHz.</description>
+      </entry>
+      <entry value="4" name="MAV_ODID_RADIO_WIFI_SUPPORTED_FREQUENCY_BANDS_5GHZ">
+        <description>The device has a WiFi radio that supports the 5 GHz.</description>
+      </entry>
+    </enum>
+    <enum name="MAV_ODID_MESSAGES_SUPPORTED" bitmask="true">
+      <description>Describes which OpenDroneID messages the device supports (bitmask)</description>
+      <entry value="1" name="MAV_ODID_MESSAGES_SUPPORTED_BASIC_ID">
+        <description>The device supports OpenDroneID Basic ID messages.</description>
+      </entry>
+      <entry value="2" name="MAV_ODID_MESSAGES_SUPPORTED_LOCATION">
+        <description>The device supports OpenDroneID Location messages.</description>
+      </entry>
+      <entry value="4" name="MAV_ODID_MESSAGES_SUPPORTED_AUTHENTICATION">
+        <description>The device supports OpenDroneID Authentication messages.</description>
+      </entry>
+      <entry value="8" name="MAV_ODID_MESSAGES_SUPPORTED_SELF_ID">
+        <description>The device supports OpenDroneID Self ID messages.</description>
+      </entry>
+      <entry value="16" name="MAV_ODID_MESSAGES_SUPPORTED_SYSTEM">
+        <description>The device supports OpenDroneID System ID messages.</description>
+      </entry>
+      <entry value="32" name="MAV_ODID_MESSAGES_SUPPORTED_OPERATOR_ID">
+        <description>The device supports OpenDroneID Operator ID messages.</description>
+      </entry>
+      <entry value="64" name="MAV_ODID_MESSAGES_SUPPORTED_MESSAGE_PACK">
+        <description>The device supports OpenDroneID Message Pack messages.</description>
+      </entry>
+      <entry value="128" name="MAV_ODID_MESSAGES_SUPPORTED_CONTROL">
+        <description>The device supports OpenDroneID Control messages.</description>
+      </entry>
+    </enum>
+    <enum name="MAV_CMD">      
+      <entry value="12916" name="MAV_CMD_OPEN_DRONE_ID_RADIO_CONTROL" hasLocation="false" isDestination="false">
+        <wip/>
+        <!-- This command is work-in-progress and it can therefore change, and should NOT be used in stable production environments -->
+        <description>A command to control the radio of an OpenDroneID device.</description>
+        <param index="1" label="transmit_control" enum="MAV_ODID_RADIO_CONTROL">Start/stop etc. the transmission of OpenDroneID radio messages from the device.</param>
+        <param index="2" label="receive_control" enum="MAV_ODID_RADIO_CONTROL">Start/stop etc. the reception of OpenDroneID radio messages by the device. Can be ignored by the device if reception is not supported.</param>
+        <param index="3" label="transmit_mode" enum="MAV_ODID_RADIO_MODE">Configures the OpenDroneID radio transmission mode.</param>
+        <param index="4" label="receive_mode" enum="MAV_ODID_RADIO_MODE">Configures the OpenDroneID radio reception mode. Can be ignored by the device if reception is not supported.</param>
+        <param index="5" label="transmission_period_ms" units="ms">Configures the OpenDroneID transmission period. Valid values are between 100 and 3000 ms.</param>
+        <param index="6" label="transmission_wifi">Configures the WiFi channel used for transmission (in WiFi mode). If set to 0, transmission is disabled. If set to 255, it is up to the transmitter to select a WiFi channel. Valid channels are defined here: https://en.wikipedia.org/wiki/List_of_WLAN_channels. For the 2.4GHz it is 1 to 14.</param>
+        <param index="4" label="region" enum="MAV_ODID_REGION">Configure the region; needed for compliance tests.</param>
+      </entry>
+    </enum>
+  </enums>
+<messages>
+ <message id="12917" name="OPEN_DRONE_ID_BROADCAST_CAPABILITIES">
+      <wip/>
+      <!-- This message is work-in-progress and it can therefore change, and should NOT be used in stable production environments -->
+      <description>A message for an OpenDroneID device to declare its capabilities to a controlling MAVLink device(s) (e.g. a flight controller, GCS etc.).</description>
+      <field type="uint8_t" name="target_system">System ID (0 for broadcast).</field>
+      <field type="uint8_t" name="target_component">Component ID (0 for broadcast).</field>
+      <field type="uint8_t" name="radio_function" enum="MAV_ODID_RADIO_FUNCTION">The device is a transmitter, a receiver or both.</field>
+      <field type="uint8_t" name="radio" enum="MAV_ODID_RADIO_TYPES" display="bitmask">Describes which radio types the device has (Bluetooth, WiFi).</field>
+      <field type="uint8_t" name="radio_wifi_frequency_bands" enum="MAV_ODID_RADIO_WIFI_SUPPORTED_FREQUENCY_BANDS" display="bitmask">Describes supported frequency bands of the WiFi radio(s).</field>
+      <field type="uint8_t" name="radio_wifi_count">Describes how many (independent) WiFi radio(s) the device has.</field>
+      <field type="uint8_t" name="commands_supported" enum="MAV_ODID_MESSAGES_SUPPORTED" display="bitmask">Describes which OpenDroneID messages the device supports.</field>
+      <field type="uint8_t" name="basic_id_max">Describes how many different basic IDs the device supports. The valid range is 1 to 4.</field>
+      <field type="uint8_t" name="authentication_pages_max">Describes how many Authentication pages the device supports. Maximum value is 16.</field>
+  </message>
+</messages>
+</mavlink>
