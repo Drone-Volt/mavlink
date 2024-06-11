@@ -2,6 +2,7 @@
 <mavlink>
   <include>common.xml</include>
   <!-- Vendors -->
+  <include>rid.xml</include>
   <include>uAvionix.xml</include>
   <include>icarous.xml</include>
   <include>loweheiser.xml</include>

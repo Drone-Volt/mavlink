@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
 <mavlink>  
-  <include>ardupilotmega.xml</include>
+<!--  <include>ardupilotmega.xml</include>-->
   <enums>
       <enum name="MAV_ODID_RADIO_MODE" bitmask="true">
       <description>Flags controlling the radio mode(s) of the OpenDroneID device (bitmask)</description>
