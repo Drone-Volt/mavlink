@@ -3,6 +3,7 @@
   <include>common.xml</include>
   <!-- Vendors -->
   <include>rid.xml</include>
+  <include>dronevolt.xml</include>
   <include>uAvionix.xml</include>
   <include>icarous.xml</include>
   <include>loweheiser.xml</include>
