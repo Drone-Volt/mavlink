@@ -119,7 +119,7 @@
       <entry value="8" name="UAVIONIX_ADSB_NIC_CR_0_1_NM"/>
       <entry value="9" name="UAVIONIX_ADSB_NIC_CR_75_M"/>
       <entry value="10" name="UAVIONIX_ADSB_NIC_CR_25_M"/>
-      <entry value="11" name="UAVIONIX_ADSB_NIC_CR_7_5_M"/>
+      <entry value="11" name="UAVIONIX_ADSB_NIC_CR_7_5_M2"/>
       <entry value="16" name="UAVIONIX_ADSB_NACP_EPU_10_NM"/>
       <entry value="32" name="UAVIONIX_ADSB_NACP_EPU_4_NM"/>
       <entry value="48" name="UAVIONIX_ADSB_NACP_EPU_2_NM"/>

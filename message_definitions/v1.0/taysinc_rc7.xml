@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<mavlink>
+  <messages>
+    <message id="21168" name="GET_RC_CHANNEL_VALUE_REQ">
+      <description>Get RC channel value request</description>
+      <field type="uint8_t" name="req">1 - success</field>
+    </message>
+
+    <message id="21169" name="GET_RC_CHANNEL_VALUE_RESPOND">
+      <description>Get RC channel value response</description>
+      <field type="uint16_t[16]" name="channel"></field>
+      <field type="uint16_t[16]" name="channelExt"></field>
+    </message>
+  </messages>
+</mavlink>
