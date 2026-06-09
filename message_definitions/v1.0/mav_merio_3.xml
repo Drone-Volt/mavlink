@@ -1,0 +1,1196 @@
+<?xml version="1.0"?>
+<mavlink>
+  <include>common.xml</include>
+  <version>3</version>
+  <dialect>0</dialect>
+
+  <enums>
+    
+    <enum name="MAV_MERIO_GIMBAL_STATE">
+      <description>Overall gimbal controller state.</description>
+      <entry value="255" name="MAV_MERIO_GIMBAL_STATE_COM_LOST">
+        <description>Communication between gimbal and VisionMax lost (sentinel for -1).</description>
+      </entry>
+      <entry value="0" name="MAV_MERIO_GIMBAL_STATE_INIT">
+        <description>Power-up initialization in progress.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_GIMBAL_STATE_INDEX">
+        <description>Relative encoder indexing to find absolute position.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_GIMBAL_STATE_WAIT">
+        <description>Waiting before starting gimbal motion.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_GIMBAL_STATE_ZEROS">
+        <description>Moving to zero position after initialization.</description>
+      </entry>
+      <entry value="4" name="MAV_MERIO_GIMBAL_STATE_OFF">
+        <description>Motor control off.</description>
+      </entry>
+      <entry value="5" name="MAV_MERIO_GIMBAL_STATE_VELOCITY">
+        <description>Controlled by velocity commands.</description>
+      </entry>
+      <entry value="6" name="MAV_MERIO_GIMBAL_STATE_POSITION">
+        <description>Controlled by position commands.</description>
+      </entry>
+      <entry value="7" name="MAV_MERIO_GIMBAL_STATE_GEOTRACKING">
+        <description>Pointing toward specified geographic target.</description>
+      </entry>
+      <entry value="8" name="MAV_MERIO_GIMBAL_STATE_PATHTRACKING">
+        <description>Following a path in path-tracking mode.</description>
+      </entry>
+      <entry value="9" name="MAV_MERIO_GIMBAL_STATE_FLIP">
+        <description>Executing gimbal flip.</description>
+      </entry>
+      <entry value="10" name="MAV_MERIO_GIMBAL_STATE_FALLBACKNUC">
+        <description>Performing NUC with tilt axis motion.</description>
+      </entry>
+      <entry value="11" name="MAV_MERIO_GIMBAL_STATE_STOW">
+        <description>In stow position.</description>
+      </entry>
+      <entry value="12" name="MAV_MERIO_GIMBAL_STATE_MOTORPROBLEM">
+        <description>Motors temporarily switched off due to overload.</description>
+      </entry>
+      <entry value="13" name="MAV_MERIO_GIMBAL_STATE_UPGRADEPAN">
+        <description>Pan board firmware upgrade in progress.</description>
+      </entry>
+      <entry value="14" name="MAV_MERIO_GIMBAL_STATE_UPGRADETILT">
+        <description>Tilt board firmware upgrade in progress.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_GIMBAL_MODE">
+      <description>Gimbal operating mode selector.</description>
+      <entry value="0" name="MAV_MERIO_GIMBAL_MODE_VELOCITY">
+        <description>Velocity control mode.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_GIMBAL_MODE_POSITION">
+        <description>Position control mode.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_GIMBAL_MODE_STOW">
+        <description>Stow mode.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_GIMBAL_MODE_GEO_TRACK">
+        <description>Geotracking mode.</description>
+      </entry>
+      <entry value="4" name="MAV_MERIO_GIMBAL_MODE_PATH_TRACK">
+        <description>Path-tracking mode.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_DAY_FOCUS_MODE">
+      <description>Day camera focus control mode.</description>
+      <entry value="0" name="MAV_MERIO_DAY_FOCUS_MODE_MANUAL">
+        <description>Manual focus driven by velocity commands.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_DAY_FOCUS_MODE_AUTO">
+        <description>Continuous autofocus.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_DAY_FOCUS_MODE_MANUAL_WITH_AF_ON_ZOOM">
+        <description>Manual focus with autofocus triggered during zoom moves.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_NUC_MODE">
+      <description>NUC action mode for night camera.</description>
+      <entry value="0" name="MAV_MERIO_NUC_MODE_SIMPLE">
+        <description>Simple NUC without lens or gimbal movement.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_NUC_MODE_IR_LENS_ONLY">
+        <description>NUC with IR lens movement only.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_NUC_MODE_GIMBAL_ONLY">
+        <description>NUC with gimbal movement only.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_NUC_MODE_IR_LENS_AND_GIMBAL">
+        <description>NUC with both IR lens and gimbal movement.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_NAVIGATION_MODE">
+      <description>Navigation computation mode.</description>
+      <entry value="0" name="MAV_MERIO_NAVIGATION_MODE_OFF">
+        <description>Navigation is off.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_NAVIGATION_MODE_STANDALONE">
+        <description>Use internal computation without GPS/external navigation.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_NAVIGATION_MODE_EXTERNAL">
+        <description>Use external navigation data; do not compute RPY internally. 
+          When using EXTERNAL navigation mode, to work properly, gimbal must receive with at least 10Hz values for:
+          •	RPY (Roll, Pitch, Yaw), •	LLH (Latitude, Longitude, Altitude).
+        </description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_NAVIGATION_MODE_INTERNAL">
+        <description>Use inner IMU for navigation computation. 
+          When using INTERNAL navigation mode, to work properly, gimbal must receive with at least 1Hz values below:
+          •	VELNED (Velocity North, East, Down),•	LLH,•	HEADING.
+        </description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_CAM0_MODEL">
+      <description>Day camera model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_CAM0_MODEL_NONE">
+        <description>No camera.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_CAM0_MODEL_TAMERON_MP3010">
+        <description>Tameron MP3010.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_CAM0_MODEL_SONY_FCB_EV9520L">
+        <description>Sony FCB-EV9520L.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_CAM0_MODEL_WONWOO_MM_555">
+        <description>Wonwoo MM-555.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_CAM1_MODEL">
+      <description>Night camera model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_CAM1_MODEL_NONE">
+        <description>No camera.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_CAM1_MODEL_ASTROHN_ASTIR2">
+        <description>Astrohn ASTIR2.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_CAM1_MODEL_ASTROHN_ASTIR3">
+        <description>Astrohn ASTIR3.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_CAM1_MODEL_BERTIN_CAMSIGHT_HD">
+        <description>Bertin Camsight HD.</description>
+      </entry>
+      <entry value="4" name="MAV_MERIO_CAM1_MODEL_NOXCORE_275">
+        <description>NoxCore 275.</description>
+      </entry>
+      <entry value="5" name="MAV_MERIO_CAM1_MODEL_NOXCORE_400">
+        <description>NoxCore 400.</description>
+      </entry>
+      <entry value="6" name="MAV_MERIO_CAM1_MODEL_TWIN_640">
+        <description>Twin 640.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_IR_LENS_MODEL">
+      <description>IR lens model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_IR_LENS_MODEL_NONE">
+        <description>No lens.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_IR_LENS_MODEL_OPHIR_15_75">
+        <description>Ophir 15-75.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_IR_LENS_MODEL_GALLIL_30_99">
+        <description>Gallil 30/99.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_IR_LENS_MODEL_FIXED_35MM">
+        <description>Fixed 35mm.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_LRF_MODEL">
+      <description>LRF model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_LRF_MODEL_NONE">
+        <description>No LRF.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_LRF_MODEL_NOPTEL_15A">
+        <description>Noptel 15A.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_LRF_MODEL_NOPTEL_126">
+        <description>Noptel 126.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_LRF_MODEL_NOPTEL_127">
+        <description>Noptel 127.</description>
+      </entry>
+      <entry value="4" name="MAV_MERIO_LRF_MODEL_NOPTEL_200">
+        <description>Noptel 200.</description>
+      </entry>
+      <entry value="5" name="MAV_MERIO_LRF_MODEL_NOPTEL_X20A">
+        <description>Noptel X20A.</description>
+      </entry>
+      <entry value="6" name="MAV_MERIO_LRF_MODEL_SAFRAN_6019">
+        <description>Safran 6019.</description>
+      </entry>
+      <entry value="7" name="MAV_MERIO_LRF_MODEL_SAFRAN_LP">
+        <description>Safran LP.</description>
+      </entry>
+      <entry value="8" name="MAV_MERIO_LRF_MODEL_SAFRAN_HP">
+        <description>Safran HP.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_POINTER_MODEL">
+      <description>Pointer/illuminator model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_POINTER_MODEL_NONE">
+        <description>No pointer.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_POINTER_MODEL_ILI40">
+        <description>ILI40.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_POINTER_MODEL_JULA">
+        <description>JULA.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_POINTER_MODEL_VLM40">
+        <description>VLM40.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_DESIGNATOR_MODEL">
+      <description>Laser designator model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_DESIGNATOR_MODEL_NONE">
+        <description>No designator.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_DESIGNATOR_MODEL_AK1">
+        <description>AK1.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_IMU_PAN_MODEL">
+      <description>IMU model used on the pan axis enumeration.</description>
+      <entry value="0" name="MAV_MERIO_IMU_PAN_MODEL_NONE">
+        <description>No IMU.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_IMU_PAN_MODEL_LSM6DSM">
+        <description>LSM6DSM.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_IMU_PAN_MODEL_EPSON_GS300">
+        <description>Epson GS300.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_TILT_GYRO_MODEL">
+      <description>Gyroscope model used on the tilt axis enumeration.</description>
+      <entry value="0" name="MAV_MERIO_TILT_GYRO_MODEL_NONE">
+        <description>No gyro.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_TILT_GYRO_MODEL_CRM">
+        <description>CRM.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_TILT_GYRO_MODEL_EPSON">
+        <description>Epson.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_GIMBAL_MODEL">
+      <description>Gimbal model enumeration.</description>
+      <entry value="0" name="MAV_MERIO_GIMBAL_MODEL_MILVUS_10">
+        <description>Milvus 10.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_GIMBAL_MODEL_MILVUS_14">
+        <description>Milvus 14.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_GIMBAL_MODEL_MILVUS_16">
+        <description>Milvus 16.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_GIMBAL_MODEL_MILVUS_25">
+        <description>Milvus 25.</description>
+      </entry>
+      <entry value="4" name="MAV_MERIO_GIMBAL_MODEL_MILVUS_7">
+        <description>Milvus 7.</description>
+      </entry>
+      <entry value="5" name="MAV_MERIO_GIMBAL_MODEL_TEMIS">
+        <description>Temis.</description>
+      </entry>
+      <entry value="6" name="MAV_MERIO_GIMBAL_MODEL_TEMIS_XL">
+        <description>Temis XL.</description>
+      </entry>
+      <entry value="7" name="MAV_MERIO_GIMBAL_MODEL_TEMIS_XL14">
+        <description>Temis XL14.</description>
+      </entry>
+      <entry value="8" name="MAV_MERIO_GIMBAL_MODEL_ORYX12">
+        <description>Oryx12.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_LASER_STRIKER_FIRE">
+      <description>Laser striker fire trigger selector.</description>
+      <entry value="0" name="MAV_MERIO_LASER_STRIKER_FIRE_OFF">
+        <description>Do not trigger firing.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_LASER_STRIKER_FIRE_ON">
+        <description>Trigger firing.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_FOLLOW_ME_MODE">
+      <description>Follow-me strategy.</description>
+      <entry value="0" name="MAV_MERIO_FOLLOW_ME_MODE_FOLLOW_ALL_TRACKERS">
+        <description>Follow all active trackers.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_FOLLOW_ME_MODE_FOLLOW_BY_CAMID">
+        <description>Follow trackers on selected camera ID.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_FOLLOW_ME_MODE_FOLLOW_ONLY_LAST">
+        <description>Follow only the last tracker.</description>
+      </entry>
+    </enum>
+
+    <enum name="MAV_MERIO_CAMERA_MASK" bitmask="true">
+      <description>Camera selection mask.</description>
+      <entry value="1" name="MAV_MERIO_CAMERA_MASK_CAMERA0"/>
+      <entry value="2" name="MAV_MERIO_CAMERA_MASK_CAMERA1"/>
+      <entry value="4" name="MAV_MERIO_CAMERA_MASK_CAMERA2"/>
+      <entry value="8" name="MAV_MERIO_CAMERA_MASK_CAMERA3"/>
+      <entry value="16" name="MAV_MERIO_CAMERA_MASK_CAMERA4"/>
+      <entry value="32" name="MAV_MERIO_CAMERA_MASK_CAMERA5"/>
+      <entry value="64" name="MAV_MERIO_CAMERA_MASK_CAMERA6"/>
+      <entry value="128" name="MAV_MERIO_CAMERA_MASK_CAMERA7"/>
+    </enum>
+
+    <enum name="MAV_MERIO_PAYLOAD_POWER_MASK" bitmask="true">
+      <description>Payload power control bits.</description>
+      <entry value="1" name="MAV_MERIO_PAYLOAD_POWER_DAYCAM"/>
+      <entry value="2" name="MAV_MERIO_PAYLOAD_POWER_NIGHTCAM"/>
+    </enum>
+
+    <enum name="MAV_MERIO_CAMERA_TEMP_SAFETY_MASK" bitmask="true">
+      <description>Camera temperature safety bits.</description>
+      <entry value="1" name="MAV_MERIO_CAMERA_TEMP_SAFETY_DAYCAM"/>
+      <entry value="2" name="MAV_MERIO_CAMERA_TEMP_SAFETY_IRCAM"/>
+    </enum>
+
+    <enum name="MAV_MERIO_POSE_FLAGS" bitmask="true">
+      <description>Pose reference frame selectors.</description>
+      <entry value="1" name="MAV_MERIO_POSE_FLAGS_PANFRAME"/>
+      <entry value="2" name="MAV_MERIO_POSE_FLAGS_TILTFRAME"/>
+    </enum>
+
+    <enum name="MAV_MERIO_VELOCITY_FLAGS" bitmask="true">
+      <description>Velocity command modifiers.</description>
+      <entry value="1" name="MAV_MERIO_VELOCITY_FLAGS_PROPZOOM"/>
+      <entry value="2" name="MAV_MERIO_VELOCITY_FLAGS_PROPZOOMSOURCE"/>
+    </enum>
+
+    <enum name="MAV_MERIO_GPS_VALID_FLAGS" bitmask="true">
+      <description>GNSS validity flags.</description>
+      <entry value="1" name="MAV_MERIO_GPS_VALID_FLAGS_GNSSVALID"/>
+    </enum>
+
+    <enum name="MAV_MERIO_BIAS_FILTER_CONTROL" bitmask="true">
+      <description>Bias filter control flags.</description>
+      <entry value="1" name="MAV_MERIO_BIAS_FILTER_ENABLE"/>
+      <entry value="2" name="MAV_MERIO_BIAS_FILTER_FORCE"/>
+    </enum>
+
+    <enum name="MAV_MERIO_NAV_SIM_FLAGS" bitmask="true">
+      <description>Navigation simulation flags.</description>
+      <entry value="1" name="MAV_MERIO_NAV_SIM_FLAGS_SIMULATION"/>
+    </enum>
+
+    <enum name="MAV_MERIO_ACTIVATED_MODES" bitmask="true">
+      <description>VisionMax activated modes.</description>
+      <entry value="1" name="MAV_MERIO_ACTIVATED_MODES_FOLLOWMEENABLED"/>
+      <entry value="2" name="MAV_MERIO_ACTIVATED_MODES_STABILIZATIONENABLED"/>
+      <entry value="4" name="MAV_MERIO_ACTIVATED_MODES_DETECTIONENABLED"/>
+      <entry value="8" name="MAV_MERIO_ACTIVATED_MODES_HASTRACKER"/>
+      <entry value="16" name="MAV_MERIO_ACTIVATED_MODES_FOLLOWMEMODE_BIT0"/>
+      <entry value="32" name="MAV_MERIO_ACTIVATED_MODES_FOLLOWMEMODE_BIT1"/>
+    </enum>
+
+    <enum name="MAV_MERIO_INNER_COM_STATUS" bitmask="true">
+      <description>Inner device comms/fan status.</description>
+      <entry value="1" name="MAV_MERIO_INNER_COM_STATUS_TILTBOARDCOM"/>
+      <entry value="2" name="MAV_MERIO_INNER_COM_STATUS_PANBOARDCOM"/>
+      <entry value="4" name="MAV_MERIO_INNER_COM_STATUS_IMUPANCOM"/>
+      <entry value="8" name="MAV_MERIO_INNER_COM_STATUS_IMUTILTCOM"/>
+      <entry value="16" name="MAV_MERIO_INNER_COM_STATUS_FANPANOK"/>
+      <entry value="32" name="MAV_MERIO_INNER_COM_STATUS_FANTILTOK"/>
+    </enum>
+
+    <enum name="MAV_MERIO_DEVICE_COM_STATUS" bitmask="true">
+      <description>EO device communication status.</description>
+      <entry value="1" name="MAV_MERIO_DEVICE_COM_STATUS_DAYCAMAVAILABLE"/>
+      <entry value="2" name="MAV_MERIO_DEVICE_COM_STATUS_NIGHTCAMAVAILABLE"/>
+      <entry value="4" name="MAV_MERIO_DEVICE_COM_STATUS_LRFAVAILABLE"/>
+      <entry value="8" name="MAV_MERIO_DEVICE_COM_STATUS_NIGHTLENSAVAILABLE"/>
+    </enum>
+
+    <enum name="MAV_MERIO_GENERAL_STATUS" bitmask="true">
+      <description>General gimbal status flags.</description>
+      <entry value="1" name="MAV_MERIO_GENERAL_STATUS_PANMOTORISSUE"/>
+      <entry value="2" name="MAV_MERIO_GENERAL_STATUS_TILTMOTORISSUE"/>
+      <entry value="4" name="MAV_MERIO_GENERAL_STATUS_LINKDEGRADED"/>
+      <entry value="8" name="MAV_MERIO_GENERAL_STATUS_LINKOK"/>
+      <entry value="16" name="MAV_MERIO_GENERAL_STATUS_INDEXPAN"/>
+      <entry value="32" name="MAV_MERIO_GENERAL_STATUS_INDEXTILT"/>
+      <entry value="64" name="MAV_MERIO_GENERAL_STATUS_FLIPACTIVE"/>
+      <entry value="128" name="MAV_MERIO_GENERAL_STATUS_ENSLAVEDZOOM"/>
+      <entry value="256" name="MAV_MERIO_GENERAL_STATUS_ENSLAVEDZOOMMASTER"/>
+      <entry value="512" name="MAV_MERIO_GENERAL_STATUS_TEMPWARNING"/>
+      <entry value="1024" name="MAV_MERIO_GENERAL_STATUS_TEMPFAULT"/>
+      <entry value="2048" name="MAV_MERIO_GENERAL_STATUS_SAFETYDAYACTIVATED"/>
+      <entry value="4096" name="MAV_MERIO_GENERAL_STATUS_SAFETYNIGHTACTIVATED"/>
+      <entry value="8192" name="MAV_MERIO_GENERAL_STATUS_TEMPCRITICAL"/>
+      <entry value="16384" name="MAV_MERIO_GENERAL_STATUS_DAYCAMPOWERED"/>
+      <entry value="32768" name="MAV_MERIO_GENERAL_STATUS_NIGHTCAMPOWERED"/>
+    </enum>
+
+    <enum name="MAV_MERIO_AVAILABLE_MODES" bitmask="true">
+      <description>Available mode flags.</description>
+      <entry value="1" name="MAV_MERIO_AVAILABLE_MODES_FLIP"/>
+      <entry value="2" name="MAV_MERIO_AVAILABLE_MODES_ICR"/>
+    </enum>
+
+    <enum name="MAV_MERIO_NAV_STATUS_FLAGS1" bitmask="true">
+      <description>Navigation status flags set 1.</description>
+      <entry value="1" name="MAV_MERIO_NAV_STATUS_FLAGS1_GYROVALID"/>
+      <entry value="2" name="MAV_MERIO_NAV_STATUS_FLAGS1_ACCVALID"/>
+      <entry value="4" name="MAV_MERIO_NAV_STATUS_FLAGS1_RPYVALID"/>
+      <entry value="8" name="MAV_MERIO_NAV_STATUS_FLAGS1_LLHVALID"/>
+      <entry value="16" name="MAV_MERIO_NAV_STATUS_FLAGS1_VELVALID"/>
+      <entry value="32" name="MAV_MERIO_NAV_STATUS_FLAGS1_HEADINGVALID"/>
+      <entry value="64" name="MAV_MERIO_NAV_STATUS_FLAGS1_GPSVALID"/>
+    </enum>
+
+    <enum name="MAV_MERIO_NAV_STATUS_FLAGS2" bitmask="true">
+      <description>Navigation status flags set 2.</description>
+      <entry value="1" name="MAV_MERIO_NAV_STATUS_FLAGS2_SIMULATION"/>
+      <entry value="2" name="MAV_MERIO_NAV_STATUS_FLAGS2_NAVBOX"/>
+    </enum>
+
+    <enum name="MAV_MERIO_BIAS_STATUS_FLAGS" bitmask="true">
+      <description>Bias filter status flags.</description>
+      <entry value="1" name="MAV_MERIO_BIAS_STATUS_FLAGS_DRIFTENABLED"/>
+      <entry value="2" name="MAV_MERIO_BIAS_STATUS_FLAGS_DRIFTFORCED"/>
+      <entry value="4" name="MAV_MERIO_BIAS_STATUS_FLAGS_DRIFTISACTIVE"/>
+    </enum>
+
+    <enum name="MAV_MERIO_DAY_CAM_STATUS" bitmask="true">
+      <description>Day camera status flags.</description>
+      <entry value="1" name="MAV_MERIO_DAY_CAM_STATUS_ICR"/>
+      <entry value="2" name="MAV_MERIO_DAY_CAM_STATUS_WIDEDYNAMIC"/>
+      <entry value="4" name="MAV_MERIO_DAY_CAM_STATUS_AUTOFOCUS"/>
+      <entry value="8" name="MAV_MERIO_DAY_CAM_STATUS_DIGITALZOOM"/>
+    </enum>
+
+    <enum name="MAV_MERIO_POINTER_FLAGS" bitmask="true">
+      <description>Laser pointer flags.</description>
+      <entry value="1" name="MAV_MERIO_POINTER_FLAGS_ENABLE"/>
+      <entry value="2" name="MAV_MERIO_POINTER_FLAGS_POWERCONTROLLABLE"/>
+    </enum>
+
+    <enum name="MAV_MERIO_STRIKER_STATUS_FLAGS" bitmask="true">
+      <description>Laser striker status flags.</description>
+      <entry value="1" name="MAV_MERIO_STRIKER_STATUS_FLAGS_READYTOARM"/>
+      <entry value="2" name="MAV_MERIO_STRIKER_STATUS_FLAGS_ARMED"/>
+      <entry value="4" name="MAV_MERIO_STRIKER_STATUS_FLAGS_PULSECODEVALID"/>
+      <entry value="8" name="MAV_MERIO_STRIKER_STATUS_FLAGS_READYTOFIRE"/>
+      <entry value="16" name="MAV_MERIO_STRIKER_STATUS_FLAGS_FIRING"/>
+      <entry value="32" name="MAV_MERIO_STRIKER_STATUS_FLAGS_COMWARNING"/>
+      <entry value="64" name="MAV_MERIO_STRIKER_STATUS_FLAGS_ALIVE"/>
+    </enum>
+
+    <enum name="MAV_MERIO_GIMBAL_ERRORS_FLAGS" bitmask="true">
+      <description>Gimbal error status flags (ERRSTATUS bits 0..24).</description>
+      <entry value="1" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_TILTBOARDERROR"/>
+      <entry value="2" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_PANBOARDERROR"/>
+      <entry value="4" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_IMUTILTERROR"/>
+      <entry value="8" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_IMUPANERROR"/>
+      <entry value="16" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_INDEXTILTERROR"/>
+      <entry value="32" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_INDEXPANERROR"/>
+      <entry value="64" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_MOTORTILTERROR"/>
+      <entry value="128" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_MOTORPANERROR"/>
+      <entry value="256" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_TILTTEMPWARNING"/>
+      <entry value="512" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_PANTEMPWARNING"/>
+      <entry value="1024" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_TILTTEMPERROR"/>
+      <entry value="2048" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_PANTEMPERROR"/>
+      <entry value="4096" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_DAYCAMERROR"/>
+      <entry value="8192" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_IRCAMERROR"/>
+      <entry value="16384" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_LRFERROR"/>
+      <entry value="32768" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_IRLENSERROR"/>
+      <entry value="65536" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_STRIKERERROR"/>
+      <entry value="131072" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_LLHERROR"/>
+      <entry value="262144" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_VELERROR"/>
+      <entry value="524288" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_TIMEERROR"/>
+      <entry value="1048576" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_HEADINGERROR"/>
+      <entry value="2097152" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_RPYERROR"/>
+      <entry value="4194304" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_GPSINFOERROR"/>
+      <entry value="8388608" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_GPSVALIDERROR"/>
+      <entry value="16777216" name="MAV_MERIO_GIMBAL_ERRORS_FLAGS_H0ERROR"/>
+    </enum>
+
+    <enum name="MAV_MERIO_LRF_MEASUREMENT_MODE">
+      <description>LRF measurement mode.</description>
+      <entry value="0" name="MAV_MERIO_LRF_MEASUREMENT_MODE_SINGLE">
+        <description>Single measurement.</description>
+      </entry>
+      <entry value="1" name="MAV_MERIO_LRF_MEASUREMENT_MODE_SLOW">
+        <description>Slow measurement.</description>
+      </entry>
+      <entry value="2" name="MAV_MERIO_LRF_MEASUREMENT_MODE_MEDIUM">
+        <description>Medium measurement.</description>
+      </entry>
+      <entry value="3" name="MAV_MERIO_LRF_MEASUREMENT_MODE_FAST">
+        <description>Fast measurement.</description>
+      </entry>
+      <entry value="4" name="MAV_MERIO_LRF_MEASUREMENT_MODE_VERY_FAST">
+        <description>Very fast measurement.</description>
+      </entry>
+      <entry value="5" name="MAV_MERIO_LRF_MEASUREMENT_MODE_STOP">
+        <description>Stop measurement.</description>
+      </entry>
+    </enum>
+
+    <enum name="ENABLE_FLAG">
+      <description>Generic enable/disable flag.</description>
+      <entry value="0" name="ENABLE_FLAG_DISABLE"/>
+      <entry value="1" name="ENABLE_FLAG_ENABLE"/>
+    </enum>
+
+    <enum name="VALID_FLAG">
+      <description>Generic valid/invalid flag.</description>
+      <entry value="0" name="VALID_FLAG_INVALID"/>
+      <entry value="1" name="VALID_FLAG_VALID"/>
+    </enum>
+
+    <enum name="CAMERA_ID">
+      <description>Camera ID.</description>
+      <entry value="0" name="CAMERA_ID_0"/>
+      <entry value="1" name="CAMERA_ID_1"/>
+      <entry value="2" name="CAMERA_ID_2"/>
+      <entry value="3" name="CAMERA_ID_3"/>
+      <entry value="4" name="CAMERA_ID_4"/>
+      <entry value="5" name="CAMERA_ID_5"/>
+      <entry value="6" name="CAMERA_ID_6"/>
+      <entry value="7" name="CAMERA_ID_7"/>
+    </enum>
+
+    <enum name="MAV_CMD">
+      <!-- Commands: VisionMax -->
+      <entry value="60000" name="MAV_CMD_MERIO_VISION_MAX_ENABLE_FOLLOW_ME_MODE">
+        <description>(de)activate follow me</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="7">Camera to set follow me behaviour</param>
+        <param index="2" label="TRACKINGSTATE" minValue="0" maxValue="1">Set ennable the followMe mode and the gimbal will follow the tracking</param>
+        <param index="3" label="TRACKERID" minValue="-1">Tracker id to follow (-1 = no filter).</param>
+      </entry>
+      <entry value="60001" name="MAV_CMD_MERIO_VISION_MAX_SET_PRIMARY_CAMERA">
+        <description>Camera under control</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="7">Camera to be as main camera</param>
+      </entry>
+      <entry value="60002" name="MAV_CMD_MERIO_VISION_MAX_SET_FOLLOW_ME_STRATEGY">
+        <deprecated since="2026-05" replaced_by="">Deprecated without replacement.</deprecated>
+        <description>Follow me mode</description>
+        <param index="1" label="FOLLOWMEMODE" enum="MAV_MERIO_FOLLOW_ME_MODE" minValue="0" maxValue="2">Follow me mode</param>
+      </entry>
+      <entry value="60003" name="MAV_CMD_MERIO_VISION_MAX_ENABLE_ROLL_STAB_RENDER">
+        <description>Enable/disable the RollStab render plugin on a given camera.</description>
+        <param index="1" label="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</param>
+        <param index="2" label="ROLLSTABENABLED" minValue="0" maxValue="1">RollStab plugin state.</param>
+      </entry>
+      <entry value="60020" name="MAV_CMD_MERIO_VISION_MAX_ENABLE_RECORDING">
+        <description>(de)activate recording for selected cameras</description>
+        <param index="1" label="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</param>
+        <param index="2" label="RECORDING">0=stop, 1=start</param>
+      </entry>
+      <entry value="60021" name="MAV_CMD_MERIO_VISION_MAX_TRIG_SNAPSHOT_CAPTURE">
+        <description>Trigger a PNG snapshot on selected cameras</description>
+        <param index="1" label="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</param>
+      </entry>
+      <entry value="60030" name="MAV_CMD_MERIO_VISION_MAX_SET_SYSTEM_TIME">
+        <description>Update system epoch</description>
+        <param index="1" label="SYSTEMEPOCH">New system epoch</param>
+      </entry>
+      <entry value="60052" name="MAV_CMD_MERIO_VISION_MAX_SET_STREAMING_ENCODER">
+        <description>Configure bitrate/profile/preset (runtime, -1=unchanged).</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="7">Camera id.</param>
+        <param index="2" label="BITRATE">Bitrate (-1=unchanged).</param>
+        <param index="3" label="PRESETLEVEL">Preset level (-1=unchanged).</param>
+        <param index="4" label="ENCODERPROFILE">Encoder profile (-1=unchanged).</param>
+      </entry>
+      <entry value="60053" name="MAV_CMD_MERIO_VISION_MAX_SET_STREAMING_INTERVALS">
+        <description>Configure MPEG-TS intervals (runtime, -1=unchanged).</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="7">Camera id.</param>
+        <param index="2" label="IFRAMEINTERVAL">I-frame interval (-1=unchanged).</param>
+        <param index="3" label="IDRINTERVAL">IDR interval (-1=unchanged).</param>
+        <param index="4" label="TSPATINTERVAL">MPEG-TS PAT interval (-1=unchanged).</param>
+        <param index="5" label="TSPCRINTERVAL">MPEG-TS PCR interval (-1=unchanged).</param>
+        <param index="6" label="TSPMTINTERVAL">MPEG-TS PMT interval (-1=unchanged).</param>
+      </entry>
+
+      <!-- Commands: Gimbal -->
+      <entry value="60100" name="MAV_CMD_MERIO_GIMBAL_TRIG_STOW_ACTION">
+        <description>Set gimbal on stow mode.</description>
+        <param index="1" label="STOW" minValue="0" maxValue="1">Dummy trigger (write any non-zero value to apply stow).</param>
+      </entry>
+      <entry value="60101" name="MAV_CMD_MERIO_GIMBAL_ENABLE_GIMBAL_FLIP">
+        <description>Flip or not the gimbal. 0, do not flip gimbal 1, flip gimbal</description>
+        <param index="1" label="FLIP" minValue="0" maxValue="1"></param>
+      </entry>
+      <entry value="60102" name="MAV_CMD_MERIO_GIMBAL_SET_PAYLOAD_POWER">
+        <description>Power control for payload devices.</description>
+        <param index="1" label="POWERMASK" enum="MAV_MERIO_PAYLOAD_POWER_MASK">Payload power mask.</param>
+      </entry>
+      <entry value="60103" name="MAV_CMD_MERIO_GIMBAL_ENABLE_CAMERA_TEMP_SAFETY">
+        <description>Handle devices safety mode.</description>
+        <param index="1" label="CAMERATEMPSAFETY" enum="MAV_MERIO_CAMERA_TEMP_SAFETY_MASK">Temperature safety on cameras.</param>
+      </entry>
+      <entry value="60104" name="MAV_CMD_MERIO_GIMBAL_SET_EPOCH_MILLIS">
+        <description>Sync value or monotonic tick in milliseconds.</description>
+        <param index="1" label="EPOCHMILLIS" units="ms" minValue="0" maxValue="11760370970000">Epoch/timestamp value (ms).</param>
+      </entry>
+      <entry value="60105" name="MAV_CMD_MERIO_GIMBAL_SET_POSE">
+        <description>Used to control the position of each axis. Positions are limited between +pi and -pi, the velocity used to reach the target position is set on the Velocity field.</description>
+        <param index="1" label="PANPOSE" units="deg" minValue="-180" maxValue="180">Commanded pan/azimuth angle.</param>
+        <param index="2" label="TILTPOSE" units="deg" minValue="-180" maxValue="180">Commanded tilt/elevation angle.</param>
+        <param index="3" label="VELOCITY" units="deg/s" minValue="0" maxValue="150">Maximum slew velocity to apply while moving to target.</param>
+        <param index="4" label="POSEFLAGS" enum="MAV_MERIO_POSE_FLAGS">Reference frame selectors (pan/tilt).</param>
+      </entry>
+      <entry value="60106" name="MAV_CMD_MERIO_GIMBAL_SET_POSE_VELOCITY">
+        <description>Direct angular rate control with optional proportional zoom coupling. Used to control the velocity for each axis. Commands will be applied during the time timeout</description>
+        <param index="1" label="PANVELOCITY" units="deg/s" minValue="-112" maxValue="112">Commanded pan/azimuth angular rate.</param>
+        <param index="2" label="TILTVELOCITY" units="deg/s" minValue="-112" maxValue="112">Commanded tilt/elevation angular rate.</param>
+        <param index="3" label="VELOCITYTIMEOUT" units="s">Command timeout (after this duration, rates are cleared).</param>
+        <param index="4" label="VELOCITYFLAGS" enum="MAV_MERIO_VELOCITY_FLAGS">When set, the velocity command is divided by the zoom ratio.</param>
+      </entry>
+      <entry value="60107" name="MAV_CMD_MERIO_GIMBAL_SET_GEO_TRACKING_POSE">
+        <description>Command geo-tracking to point the gimbal toward a geodetic target (WGS-84).</description>
+        <param index="1" label="GEOTRACKLAT" units="deg">Target latitude (WGS-84).</param>
+        <param index="2" label="GEOTRACKLON" units="deg">Target longitude (WGS-84).</param>
+        <param index="3" label="GEOTRACKALT" units="m">Target altitude above mean sea level (MSL).</param>
+      </entry>
+
+      <!-- Commands: Navigation -->
+      <entry value="60200" name="MAV_CMD_MERIO_NAVIGATION_SET_EULER_ANGLES">
+        <description>Euler attitude (roll/pitch/yaw)</description>
+        <param index="1" label="NAVROLL" units="deg" >Roll angle.</param>
+        <param index="2" label="NAVPITCH" units="deg" >Pitch angle.</param>
+        <param index="3" label="NAVYAW" units="deg" >Yaw/heading angle.</param>
+      </entry>
+      <entry value="60201" name="MAV_CMD_MERIO_NAVIGATION_SET_GPS_QUALITY">
+        <description>GNSS quality — PDOP, satellite count, and validity flag.</description>
+        <param index="1" label="PDOP" minValue="0" maxValue="200">Position Dilution of Precision.</param>
+        <param index="2" label="SATCOUNT" minValue="0" maxValue="32">Number of satellites used.</param>
+        <param index="3" label="VALIDFLAGS" enum="MAV_MERIO_GPS_VALID_FLAGS">GNSS validity flags.</param>
+      </entry>
+      <entry value="60202" name="MAV_CMD_MERIO_NAVIGATION_SET_GPS_TIME">
+        <description>GNSS time of day/date — calendar fields down to milliseconds.</description>
+        <param index="1" label="YEAR">Year.</param>
+        <param index="2" label="MONTH">Month.</param>
+        <param index="3" label="DAY">Day.</param>
+        <param index="4" label="HOUR">Hour.</param>
+        <param index="5" label="MINUTE">Minutes.</param>
+        <param index="6" label="SECOND">Seconds.</param>
+        <param index="7" label="MILLISECOND">Milliseconds.</param>
+      </entry>
+      <entry value="60203" name="MAV_CMD_MERIO_NAVIGATION_SET_GROUND_ALTITUDE_REF">
+        <description>Ground altitude reference (H0) — set/forward the ground level (MSL).</description>
+        <param index="1" label="GROUNDALTITUDE" units="m">Ground altitude (MSL).</param>
+      </entry>
+      <entry value="60204" name="MAV_CMD_MERIO_NAVIGATION_SET_HEADING_ANGLE">
+        <description>Heading (deg) — heading/track information as a degree angle.</description>
+        <param index="1" label="HEADING" units="deg">Heading angle.</param>
+      </entry>
+      <entry value="60205" name="MAV_CMD_MERIO_NAVIGATION_SET_RAW_GPS_POSITION">
+        <description>Raw GNSS position (LLH) — latitude/longitude (deg) and altitude (m).</description>
+        <param index="1" label="RAWGPSLAT" units="deg">Latitude (WGS-84).</param>
+        <param index="2" label="RAWGPSLON" units="deg">Longitude (WGS-84).</param>
+        <param index="3" label="RAWGPSALT" units="m">Altitude (WGS-84 ellipsoid or MSL per integration).</param>
+      </entry>
+      <entry value="60206" name="MAV_CMD_MERIO_NAVIGATION_SET_NED_VELOCITY">
+        <description>NED velocity — North/East/Down speeds.</description>
+        <param index="1" label="VELNORTH" units="m/s">North velocity.</param>
+        <param index="2" label="VELEAST" units="m/s">East velocity.</param>
+        <param index="3" label="VELDOWN" units="m/s">Down velocity.</param>
+      </entry>
+      <entry value="60207" name="MAV_CMD_MERIO_NAVIGATION_ENABLE_GYRO_BIAS_FILTER">
+        <description>Bias/Drift filter control — enable the gyro drift compensation and optionally force an immediate correction.</description>
+        <param index="1" label="BIASFILTERCONTROL" enum="MAV_MERIO_BIAS_FILTER_CONTROL">Bias filter control flags.</param>
+      </entry>
+      <entry value="60208" name="MAV_CMD_MERIO_NAVIGATION_SET_NAVIGATION_MODE">
+        <description>select nav MODE and toggle simulation flag.</description>
+        <param index="1" label="NAVMODE" enum="MAV_MERIO_NAVIGATION_MODE" minValue="0" maxValue="3">Navigation mode selector.</param>
+        <param index="2" label="NAVSIMULATIONFLAG" enum="MAV_MERIO_NAV_SIM_FLAGS">Simulation flag.</param>
+      </entry>
+
+      <!-- Commands: GenericCamera -->
+      <entry value="60300" name="MAV_CMD_MERIO_GENERIC_CAMERA_SET_FOCUS_VELOCITY">
+        <description>Set focus on selected camera</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1">Select the camera to apply the focus command on</param>
+        <param index="2" label="FOCUSVELOCITY" minValue="-100" maxValue="100">Focus drive velocity (signed; negative = toward near focus, positive = toward far focus)</param>
+        <param index="3" label="TIMEOUTSEC" units="s">Command hold timeout; after this duration, the focus drive stops</param>
+      </entry>
+      <entry value="60301" name="MAV_CMD_MERIO_GENERIC_CAMERA_TRIG_FOCUS_NEAR">
+        <description>Set focus on selected camera</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1"></param>
+      </entry>
+      <entry value="60302" name="MAV_CMD_MERIO_GENERIC_CAMERA_TRIG_FOCUS_FAR">
+        <description>Set focus on selected camera</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1"></param>
+      </entry>
+      <entry value="60303" name="MAV_CMD_MERIO_GENERIC_CAMERA_TRIG_AUTO_FOCUS">
+        <description>Trig auto-focus one time</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1"></param>
+      </entry>
+      <entry value="60304" name="MAV_CMD_MERIO_GENERIC_CAMERA_ENABLE_LINKED_ZOOM">
+        <description>Enable/disable zoom linked. \n If enabled, when first camera's zoom stopped, the second camera's zoom will be applied according to first one.</description>
+        <param index="1" label="LINKEDZOOM" minValue="0" maxValue="1"></param>
+      </entry>
+      <entry value="60305" name="MAV_CMD_MERIO_GENERIC_CAMERA_SET_ZOOM_POSITION">
+        <description>Set zoom  on camera by position</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1"></param>
+        <param index="2" label="ZOOMPOSITION">Requested horizontal field of view (HFOV). Smaller angle = more zoom.</param>
+      </entry>
+      <entry value="60306" name="MAV_CMD_MERIO_GENERIC_CAMERA_SET_ZOOM_VELOCITY">
+        <description>Set zoom on camera by velocity</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1"></param>
+        <param index="2" label="ZOOMVELOCITY" minValue="-100" maxValue="100">Zoom drive velocity (signed; negative = zoom out / wider HFOV, positive = zoom in / narrower HFOV)</param>
+        <param index="3" label="TIMEOUTSEC" units="s">Command hold timeout; after this duration, the zoom drive stops</param>
+      </entry>
+      <entry value="60307" name="MAV_CMD_MERIO_GENERIC_CAMERA_ENABLE_NUMERIC_ZOOM">
+        <description>Enable/disable digital (numeric) zoom on selected camera.</description>
+        <param index="1" label="CAMID" minValue="0" maxValue="1">Select camera (0 = day, 1 = night).</param>
+        <param index="2" label="NUMERICZOOMSTATE" minValue="0" maxValue="1">Digital zoom state (0 = off, 1 = on).</param>
+      </entry>
+
+      <!-- Commands: DayCamera -->
+      <entry value="60400" name="MAV_CMD_MERIO_DAY_CAMERA_SET_FOCUS_MODE">
+        <description>Day camera focus mode selector (auto/manual options).</description>
+        <param index="1" label="FOCUSMODE" enum="MAV_MERIO_DAY_FOCUS_MODE">Focus mode to apply.</param>
+      </entry>
+      <entry value="60401" name="MAV_CMD_MERIO_DAY_CAMERA_ENABLE_ICR_FILTER">
+        <description>IR-cut filter (ICR) control for day camera</description>
+        <param index="1" label="ICR" minValue="0" maxValue="1">Activate / deactivate ICR.</param>
+      </entry>
+      <entry value="60402" name="MAV_CMD_MERIO_DAY_CAMERA_ENABLE_WIDE_DYNAMIC_RANGE">
+        <description>"Wide Dynamic Range (WDR) / Wide dynamic control on/off.</description>
+        <param index="1" label="WIDEDYNAMIC" minValue="0" maxValue="1">Wide dynamic.</param>
+      </entry>
+
+      <!-- Commands: NightCamera -->
+      <entry value="60500" name="MAV_CMD_MERIO_NIGHT_CAMERA_PERFORM_NUC">
+        <description>Perform NUC action.</description>
+        <param index="1" label="NUCMODE" enum="MAV_MERIO_NUC_MODE">NUC mode selector.</param>
+      </entry>
+      <entry value="60501" name="MAV_CMD_MERIO_NIGHT_CAMERA_SET_IR_POLARITY">
+        <description>Set IR camera Polarity using palette value. -1 white hot, -2 black hot. Or value between 0 and 255</description>
+        <param index="1" label="POLARITY" minValue="-2" maxValue="255">Set the polarity on IR camera.</param>
+      </entry>
+      <entry value="60502" name="MAV_CMD_MERIO_NIGHT_CAMERA_SET_IMAGE_CONFIG">
+        <description>Configurations for IR camera. Not available on all cameras. Cameras supported list: - Astir</description>
+        <param index="1" label="MODE">Imaging mode to apply (profile/pipeline selector; system-specific UInt8 code).</param>
+        <param index="2" label="BRIGHTNESS">Brightness offset to apply (signed value; negative = darker, positive = brighter).</param>
+        <param index="3" label="CONTRAST">Global contrast gain (unsigned value; higher = stronger contrast).</param>
+        <param index="4" label="ENHANCEDCONTRAST">Electronic contrast enhancement level (e-contrast; 0 = off, higher = stronger enhancement).</param>
+        <param index="5" label="DISMISS">DISMISS command to clear OSD/overlay (token/value echoed back in status).</param>
+      </entry>
+
+      <!-- Commands: GenericLrf -->
+      <entry value="60600" name="MAV_CMD_MERIO_GENERIC_LRF_SET_LRF_MEASUREMENT_MODE">
+        <description>Lrf measurement mode MODES</description>
+        <param index="1" label="MEASUREMENTMODE" enum="MAV_MERIO_LRF_MEASUREMENT_MODE" minValue="0" maxValue="5"></param>
+      </entry>
+      <entry value="60601" name="MAV_CMD_MERIO_GENERIC_LRF_SET_LRF_RANGE_LIMITS">
+        <description>Set lrf measurement ranges.</description>
+        <param index="1" label="MINRANGE" units="m">Minimum accepted measurement distance.</param>
+        <param index="2" label="MAXRANGE" units="m">Maximum accepted measurement distance.</param>
+      </entry>
+      <entry value="60602" name="MAV_CMD_MERIO_GENERIC_LRF_ENABLE_POINTER">
+        <description>Enable/disable the laser pointer/illuminator of a LRF when supported on device.</description>
+        <param index="1" label="POINTERSTATE" minValue="0" maxValue="1">Pointer state (0 = off, 1 = on)</param>
+      </entry>
+
+      <!-- Commands: GenericLaserPointer -->
+      <entry value="60700" name="MAV_CMD_MERIO_GENERIC_LASER_POINTER_SET_POINTER_CONTROL">
+        <description>Control the laser pointer/illuminator operating mode and output power.</description>
+        <param index="1" label="MODE">Pointer operating mode (system-specific selector; e.g., off/continuous/pulsed).</param>
+        <param index="2" label="POWER" units="percent" minValue="0" maxValue="100">Requested output power/level (0 = off, 100 = maximum).</param>
+      </entry>
+
+      <!-- Commands: LaserStriker -->
+      <entry value="60800" name="MAV_CMD_MERIO_LASER_STRIKER_SET_PULSE_CODE">
+        <description>Set the desired pulse code.</description>
+        <param index="1" label="PULSECODE" units="ms" minValue="900000" maxValue="2250000"> Desired pulse code.</param>
+      </entry>
+
+      <entry value="60801" name="MAV_CMD_MERIO_LASER_STRIKER_TRIG_FIRE">
+        <description>Trigger the striker firing.</description>
+        <param index="1" label="FIRE" enum="MAV_MERIO_LASER_STRIKER_FIRE" minValue="0" maxValue="1">Trigger firing.</param>
+        <param index="2" label="TIMEOUTSEC" units="s" minValue="1" maxValue="120">Firing timeout.</param>
+      </entry>
+      <entry value="60802" name="MAV_CMD_MERIO_LASER_STRIKER_SET_KEEP_ALIVE">
+        <description>Set keep-alive timeout used to control firing timeout behavior.</description>
+        <param index="1" label="TIMEOUT" units="s" minValue="0.1" maxValue="1">Keep-alive timeout (0.1 s step, protocol range 1..10).</param>
+      </entry>
+    </enum>
+  </enums>
+
+  <messages>
+    <!-- Command payload messages  -->
+    <!-- VisionMax -->
+    <message id="64000" name="MAV_MERIO_VISION_MAX_SET_TRACKER_TARGET_MSG">
+      <description>Set tracker target with algorithm name.</description>
+      <field type="uint8_t" name="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</field>
+      <field type="float" name="TRACKINGPOSX">Tracker position X.</field>
+      <field type="float" name="TRACKINGPOSY">Tracker position Y.</field>
+      <field type="float" name="ROIWIDTH">Tracker width.</field>
+      <field type="float" name="ROIHEIGHT">Tracker height.</field>
+      <field type="char[32]" name="ALGORITHMNAME">Name of the tracker algorithm (e.g., CSRTTrackingAlgo).</field>
+    </message>
+    <message id="64001" name="MAV_MERIO_VISION_MAX_ENABLE_DETECTION_ALGO_MSG">
+      <description>Enable/disable detection algorithm with name.</description>
+      <field type="uint8_t" name="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</field>
+      <field type="uint8_t" name="DETECTIONENABLED" enum="ENABLE_FLAG">Detection algorithm state.</field>
+      <field type="char[32]" name="ALGORITHMNAME">Name of the detection algorithm.</field>
+    </message>
+    <message id="64002" name="MAV_MERIO_VISION_MAX_ENABLE_STABILIZATION_ALGO_MSG">
+      <description>Enable/disable stabilization algorithm with name.</description>
+      <field type="uint8_t" name="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</field>
+      <field type="uint8_t" name="STABILIZATION" enum="ENABLE_FLAG">Stabilization algorithm state.</field>
+      <field type="char[32]" name="ALGORITHMNAME">Name of the stabilization algorithm.</field>
+    </message>
+    <message id="64003" name="MAV_MERIO_VISION_MAX_SET_NETWORK_CONFIGURATION_MSG">
+      <description>Network configuration strings.</description>
+      <field type="char[32]" name="IPCIDR">CIDR address (e.g., 192.168.1.50/24).</field>
+      <field type="char[32]" name="GATEWAY">Gateway.</field>
+      <field type="char[64]" name="DNSSERVERS">DNS servers separated by space.</field>
+    </message>
+    <message id="64004" name="MAV_MERIO_VISION_MAX_SET_STREAMING_PARAMS_MSG">
+      <description>Configure streaming server parameters.</description>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
+      <field type="char[16]" name="PROTOCOL">Protocol (rtsp/rtp/udp/http).</field>
+      <field type="char[16]" name="MODE">Mode (unicast/multicast).</field>
+      <field type="char[16]" name="CODEC">Codec (h264/h265).</field>
+      <field type="uint32_t" name="PORT">Port.</field>
+      <field type="char[64]" name="VIDEOPATH">Video path.</field>
+      <field type="char[64]" name="ADDRESS">Address.</field>
+      <field type="uint32_t" name="BITRATE">Bitrate.</field>
+      <field type="uint32_t" name="PRESETLEVEL">Preset level.</field>
+      <field type="uint32_t" name="ENCODERPROFILE">Encoder profile.</field>
+      <field type="uint32_t" name="CONTROLRATEPOLICY">Control rate policy.</field>
+      <field type="uint32_t" name="IFRAMEINTERVAL">I-frame interval.</field>
+      <field type="uint32_t" name="IDRINTERVAL">IDR interval.</field>
+      <field type="uint32_t" name="TSPATINTERVAL">MPEG-TS PAT interval.</field>
+      <field type="uint32_t" name="TSPCRINTERVAL">MPEG-TS PCR interval.</field>
+      <field type="uint32_t" name="TSPMTINTERVAL">MPEG-TS PMT interval.</field>
+      <field type="char[16]" name="RTSP_TRANSPORT">Transport selector (udp/tcp/all depending on protocol).</field>
+      <field type="uint32_t" name="MTU">Payload MTU.</field>
+    </message>
+    <message id="64005" name="MAV_MERIO_VISION_MAX_SET_STREAMING_ENCODER_MSG">
+      <description>Configure bitrate/profile/preset (runtime, -1=unchanged).</description>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
+      <field type="int32_t" name="BITRATE">Bitrate (-1=unchanged).</field>
+      <field type="int32_t" name="PRESETLEVEL">Preset level (-1=unchanged).</field>
+      <field type="int32_t" name="ENCODERPROFILE">Encoder profile (-1=unchanged).</field>
+    </message>
+    <message id="64006" name="MAV_MERIO_VISION_MAX_SET_STREAMING_INTERVALS_MSG">
+      <description>Configure MPEG-TS intervals (runtime, -1=unchanged).</description>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
+      <field type="int32_t" name="IFRAMEINTERVAL">I-frame interval (-1=unchanged).</field>
+      <field type="int32_t" name="IDRINTERVAL">IDR interval (-1=unchanged).</field>
+      <field type="int32_t" name="TSPATINTERVAL">MPEG-TS PAT interval (-1=unchanged).</field>
+      <field type="int32_t" name="TSPCRINTERVAL">MPEG-TS PCR interval (-1=unchanged).</field>
+      <field type="int32_t" name="TSPMTINTERVAL">MPEG-TS PMT interval (-1=unchanged).</field>
+    </message>
+    <message id="64007" name="MAV_MERIO_VISION_MAX_SET_STREAMING_ENDPOINT_MSG">
+      <description>Configure endpoint/mode/protocol/codec (runtime, empty=unchanged).</description>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
+      <field type="char[16]" name="PROTOCOL">Protocol (empty=unchanged).</field>
+      <field type="char[16]" name="MODE">Mode (empty=unchanged).</field>
+      <field type="char[16]" name="CODEC">Codec (empty=unchanged).</field>
+      <field type="int32_t" name="PORT">Port (-1=unchanged).</field>
+      <field type="char[64]" name="VIDEOPATH">Video path (empty=unchanged).</field>
+      <field type="char[64]" name="ADDRESS">Address (empty=unchanged).</field>
+      <field type="char[16]" name="RTSP_TRANSPORT">Transport (empty=unchanged).</field>
+      <field type="int32_t" name="MTU">MTU (-1=unchanged).</field>
+    </message>
+
+    <!-- Status: VisionMax -->
+    <message id="65000" name="MAV_MERIO_VISION_MAX_CAMERA_MODE">
+      <description>VisionMax global status</description>
+      <field type="uint8_t" name="ACTIVATEDMODES" enum="MAV_MERIO_ACTIVATED_MODES">Activated modes bitmask (includes follow-me mode bits).</field>
+      <field type="uint8_t" name="MAINCAMID">Main camera under control</field>
+      <field type="uint8_t" name="DETECTIONCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Detection enabled per camera (mask).</field>
+      <field type="uint8_t" name="STABILIZATIONCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Stabilization enabled per camera (mask).</field>
+      <field type="uint8_t" name="NUMTRACKERS">Number of active trackers</field>
+    </message>
+    <message id="65001" name="MAV_MERIO_VISION_MAX_RECORDING_MODE">
+      <description>Recording status information</description>
+      <field type="uint8_t" name="RECORDINGCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Recording enabled per camera (mask).</field>
+      <field type="uint32_t" name="RECORDTIMESEC0">duration cam0</field>
+      <field type="uint32_t" name="RECORDTIMESEC1">duration cam1</field>
+      <field type="uint32_t" name="RECORDTIMESEC2">duration cam2</field>
+      <field type="uint32_t" name="RECORDTIMESEC3">duration cam3</field>
+      <field type="uint32_t" name="RECORDTIMESEC4">duration cam4</field>
+      <field type="uint32_t" name="RECORDTIMESEC5">duration cam5</field>
+      <field type="uint32_t" name="RECORDTIMESEC6">duration cam6</field>
+      <field type="uint32_t" name="RECORDTIMESEC7">duration cam7</field>
+    </message>
+    <message id="65002" name="MAV_MERIO_VISION_MAX_NETWORK_STATUS">
+      <description>Etat reseau courant (connexion/IP/mask/gateway/DNS)</description>
+      <field type="char[32]" name="NETWORKIP">Adresse IP</field>
+      <field type="char[32]" name="NETWORKMASK">Masque</field>
+      <field type="char[32]" name="NETWORKGATEWAY">Passerelle</field>
+      <field type="char[32]" name="NETWORKDNS">DNS</field>
+      <field type="char[96]" name="NETWORKINFO">Sortie brute nmcli</field>
+    </message>
+    <message id="65003" name="MAV_MERIO_VISION_MAX_ROLL_STAB">
+      <description>RollStab status information</description>
+      <field type="uint8_t" name="ROLLSTABENABLED" enum="MAV_MERIO_CAMERA_MASK">RollStab enabled per camera (mask).</field>
+    </message>
+    <message id="65004" name="MAV_MERIO_VISION_MAX_DISK">
+      <description>Disk space status for recording storage</description>
+      <field type="uint64_t" name="DISKMAXBYTES">Configured maximum bytes (quota or volume)</field>
+      <field type="uint64_t" name="DISKREMAININGBYTES">Remaining bytes available for recording</field>
+      <field type="float" name="DISKPERCENTUSED">Percent used against the configured maximum</field>
+      <field type="uint8_t" name="DISKQUOTAEXCEEDED">1 when guard thresholds are exceeded</field>
+    </message>
+    <message id="65020" name="MAV_MERIO_VISION_MAX_STREAMING_PARAMS_CAM0">
+      <description>Streaming parameters camera 0</description>
+      <field type="char[16]" name="PROTOCOL">Protocol (rtsp/rtp/udp/http)</field>
+      <field type="char[16]" name="MODE">Mode (unicast/multicast)</field>
+      <field type="char[16]" name="CODEC">Codec (h264/h265)</field>
+      <field type="uint32_t" name="PORT">Port</field>
+      <field type="char[64]" name="VIDEOPATH">Video path</field>
+      <field type="char[64]" name="ADDRESS">Address</field>
+      <field type="uint32_t" name="BITRATE">Bitrate</field>
+      <field type="uint32_t" name="PRESETLEVEL">Preset level</field>
+      <field type="uint32_t" name="ENCODERPROFILE">Encoder profile</field>
+      <field type="uint32_t" name="CONTROLRATEPOLICY">Control rate policy</field>
+      <field type="uint32_t" name="IFRAMEINTERVAL">I-frame interval</field>
+      <field type="uint32_t" name="IDRINTERVAL">IDR interval</field>
+      <field type="uint32_t" name="TSPATINTERVAL">MPEG-TS PAT interval</field>
+      <field type="uint32_t" name="TSPCRINTERVAL">MPEG-TS PCR interval</field>
+      <field type="uint32_t" name="TSPMTINTERVAL">MPEG-TS PMT interval</field>
+      <field type="char[16]" name="RTSP_TRANSPORT">Transport selector (udp/tcp/all depending on protocol)</field>
+      <field type="uint32_t" name="MTU">Payload MTU</field>
+    </message>
+    <message id="65021" name="MAV_MERIO_VISION_MAX_STREAMING_PARAMS_CAM1">
+      <description>Streaming parameters camera 1</description>
+      <field type="char[16]" name="PROTOCOL">Protocol (rtsp/rtp/udp/http)</field>
+      <field type="char[16]" name="MODE">Mode (unicast/multicast)</field>
+      <field type="char[16]" name="CODEC">Codec (h264/h265)</field>
+      <field type="uint32_t" name="PORT">Port</field>
+      <field type="char[64]" name="VIDEOPATH">Video path</field>
+      <field type="char[64]" name="ADDRESS">Address</field>
+      <field type="uint32_t" name="BITRATE">Bitrate</field>
+      <field type="uint32_t" name="PRESETLEVEL">Preset level</field>
+      <field type="uint32_t" name="ENCODERPROFILE">Encoder profile</field>
+      <field type="uint32_t" name="CONTROLRATEPOLICY">Control rate policy</field>
+      <field type="uint32_t" name="IFRAMEINTERVAL">I-frame interval</field>
+      <field type="uint32_t" name="IDRINTERVAL">IDR interval</field>
+      <field type="uint32_t" name="TSPATINTERVAL">MPEG-TS PAT interval</field>
+      <field type="uint32_t" name="TSPCRINTERVAL">MPEG-TS PCR interval</field>
+      <field type="uint32_t" name="TSPMTINTERVAL">MPEG-TS PMT interval</field>
+      <field type="char[16]" name="RTSP_TRANSPORT">Transport selector (udp/tcp/all depending on protocol)</field>
+      <field type="uint32_t" name="MTU">Payload MTU</field>
+    </message>
+
+    <!-- Status: Gimbal -->
+    <message id="65100" name="MAV_MERIO_GIMBAL_GIMBAL_STATUS">
+      <description>Regroups informations on gimbal, temperatures, communication and other features states.</description>
+      <field type="uint8_t" name="GIMBALSTATE" enum="MAV_MERIO_GIMBAL_STATE">Overall gimbal state code.</field>
+      <field type="uint8_t" name="GIMBALMODE" enum="MAV_MERIO_GIMBAL_MODE">Current gimbal operating mode.</field>
+      <field type="uint16_t" name="INNERCOMSTATUS" enum="MAV_MERIO_INNER_COM_STATUS">Inner device communication/fan status.</field>
+      <field type="uint32_t" name="DEVICECOMSTATUS" enum="MAV_MERIO_DEVICE_COM_STATUS">EO device communication status.</field>
+      <field type="int8_t" name="PANTEMPERATURE" units="degC">The temperature of the pan axis.</field>
+      <field type="int16_t" name="TILTTEMPERATURE" units="degC">The temperature of the TILT axis.</field>
+      <field type="uint32_t" name="GENERALSTATUS" enum="MAV_MERIO_GENERAL_STATUS">General gimbal status flags.</field>
+      <field type="uint16_t" name="TEMPTIMER" units="s">Thermal safety timer remaining/elapsed, depending on implementation.</field>
+    </message>
+    <message id="65101" name="MAV_MERIO_GIMBAL_GIMBAL_INFO">
+      <description>Gimbal information</description>
+      <field type="uint8_t" name="CAM0MODEL" enum="MAV_MERIO_CAM0_MODEL">Day camera model code.</field>
+      <field type="uint8_t" name="CAM1MODEL" enum="MAV_MERIO_CAM1_MODEL">Night camera model code.</field>
+      <field type="uint8_t" name="IRLENSMODEL" enum="MAV_MERIO_IR_LENS_MODEL">IR lens model code.</field>
+      <field type="uint8_t" name="LRFMODEL" enum="MAV_MERIO_LRF_MODEL">LRF model code.</field>
+      <field type="uint8_t" name="GIMBALMODEL" enum="MAV_MERIO_GIMBAL_MODEL">Gimbal model code.</field>
+      <field type="uint32_t" name="AVAILABLEMODES" enum="MAV_MERIO_AVAILABLE_MODES">Available mode flags.</field>
+      <field type="uint8_t" name="POINTERMODEL" enum="MAV_MERIO_POINTER_MODEL">Pointer/illuminator model code.</field>
+      <field type="uint8_t" name="DESIGNATORMODEL" enum="MAV_MERIO_DESIGNATOR_MODEL">Laser designator model code.</field>
+      <field type="uint8_t" name="IMUPANMODEL" enum="MAV_MERIO_IMU_PAN_MODEL">IMU model used on the pan axis.</field>
+      <field type="uint8_t" name="TILTGYROMODEL" enum="MAV_MERIO_TILT_GYRO_MODEL">Gyroscope model used on the tilt axis.</field>
+    </message>
+    <message id="65102" name="MAV_MERIO_GIMBAL_GIMBAL_EPOCH">
+      <description>Epoch echo — current epoch/tick value (ms).</description>
+      <field type="uint64_t" name="EPOCH" units="ms">Epoch/timestamp.</field>
+    </message>
+    <message id="65103" name="MAV_MERIO_GIMBAL_GIMBAL_MAIN_SOFTWARE_VERSION">
+      <description>Main firmware version (system controller)</description>
+      <field type="char[32]" name="MAINSOFTWAREVERSION">Main software of the gimbal.</field>
+    </message>
+    <message id="65104" name="MAV_MERIO_GIMBAL_GIMBAL_PART_NUMBER">
+      <description>Hardware part number string</description>
+      <field type="char[32]" name="PARTNUMBER">Part number of the gimbal.</field>
+    </message>
+    <message id="65105" name="MAV_MERIO_GIMBAL_GIMBAL_SERIAL_NUMBER">
+      <description>Factory-assigned serial number string.</description>
+      <field type="char[32]" name="SERIALNUMBER">Serial number of the gimbal.</field>
+    </message>
+    <message id="65106" name="MAV_MERIO_GIMBAL_GIMBAL_TIME">
+      <description>Time readback — current clock fields (year..millisec).</description>
+      <field type="int16_t" name="YEAR">Year.</field>
+      <field type="int8_t" name="MONTH">Month.</field>
+      <field type="int8_t" name="DAY">Day.</field>
+      <field type="int8_t" name="HOUR">Hour.</field>
+      <field type="int8_t" name="MINUTE">Minutes.</field>
+      <field type="int8_t" name="SECOND">Seconds.</field>
+      <field type="uint16_t" name="MILLISECOND" >Milliseconds.</field>
+    </message>
+    <message id="65107" name="MAV_MERIO_GIMBAL_POSE_STATUS">
+      <description>Gimbal pose status.</description>
+      <field type="float" name="PANPOSE"  units="deg">Pan angle</field>
+      <field type="float" name="TILTPOSE" units="deg">Tilt angle</field>
+    </message>
+    <message id="65108" name="MAV_MERIO_GIMBAL_GYRO_STATUS">
+      <description>Gimbal pose status</description>
+      <field type="float" name="GYROPANRATE" units="deg/s">Gyroscope angular rate about pan axis.</field>
+      <field type="float" name="GYROTILTRATE" units="deg/s">Gyroscope angular rate about tilt axis.</field>
+      <field type="float" name="GYROROLLRATE" units="deg/s">Gyroscope angular rate about roll axis.</field>
+      <field type="float" name="GYROPANANGLE" units="deg">Integrated gyro angle about pan axis.</field>
+      <field type="float" name="GYROTILTANGLE" units="deg">Integrated gyro angle about tilt axis.</field>
+      <field type="float" name="GYROROLLANGLE" units="deg">Integrated gyro angle about roll axis.</field>
+    </message>
+    <message id="65109" name="MAV_MERIO_GIMBAL_GEO_POSE_STATUS">
+      <description>Geotracking pose status</description>
+      <field type="float" name="GEOTRACKLAT" units="deg">Latitude.</field>
+      <field type="float" name="GEOTRACKLON" units="deg">Longitude.</field>
+      <field type="float" name="GEOTRACKALT" units="m">Altitude (MSL).</field>
+    </message>
+    <message id="65110" name="MAV_MERIO_GIMBAL_ERRORS_STATUS">
+      <description>Gimbal error status flags (ERRSTATUS).</description>
+      <field type="uint32_t" name="ERRORS" enum="MAV_MERIO_GIMBAL_ERRORS_FLAGS">Error flags bitfield.</field>
+    </message>
+
+    <!-- Status: Navigation -->
+    <message id="65200" name="MAV_MERIO_NAVIGATION_NAV_STATUS">
+      <description>Nav status — requested mode/state, GNSS quality, and validity flags.</description>
+      <field type="uint8_t" name="MODEREQUESTED" enum="MAV_MERIO_NAVIGATION_MODE">Requested navigation mode.</field>
+      <field type="uint8_t" name="STATE">Navigation state code.</field>
+      <field type="float" name="PDOP">GNSS PDOP.</field>
+      <field type="uint8_t" name="SATCOUNT">Satellites in use.</field>
+      <field type="uint32_t" name="STATUSFLAGS1" enum="MAV_MERIO_NAV_STATUS_FLAGS1">Navigation status flags set 1.</field>
+      <field type="uint32_t" name="STATUSFLAGS2" enum="MAV_MERIO_NAV_STATUS_FLAGS2">Navigation status flags set 2.</field>
+    </message>
+    <message id="65201" name="MAV_MERIO_NAVIGATION_LLH_GIMBAL">
+      <description>Gimbal LLH — current gimbal position (lat/lon/alt).</description>
+      <field type="float" name="GIMBALLAT" units="deg">Target latitude.</field>
+      <field type="float" name="GIMBALLON" units="deg">Target longitude.</field>
+      <field type="float" name="GIMBALALT" units="m">Target altitude.</field>
+    </message>
+    <message id="65202" name="MAV_MERIO_NAVIGATION_LLH_TARGET_HO">
+      <description>LLH target (H0 frame) — target position relative to ground reference.</description>
+      <field type="float" name="TARGETLATH0" units="deg">Target latitude (WGS-84).</field>
+      <field type="float" name="TARGETLONH0" units="deg">Target longitude (WGS-84).</field>
+      <field type="float" name="TARGETALTH0" units="m">Target altitude.</field>
+    </message>
+    <message id="65203" name="MAV_MERIO_NAVIGATION_LLH_TARGET_LRF">
+      <description>LLH from LRF — geolocation derived from the laser rangefinder (with age/stamp).</description>
+      <field type="float" name="TARGETLATLRF" units="deg">Latitude (WGS-84).</field>
+      <field type="float" name="TARGETLONLRF" units="deg">Longitude (WGS-84).</field>
+      <field type="float" name="TARGETALTLRF" units="m">Altitude.</field>
+      <field type="float" name="TARGETAGELRF" units="s">Age since acquisition.</field>
+      <field type="uint8_t" name="TARGETSTAMPLRF">Result stamp/index.</field>
+    </message>
+    <message id="65204" name="MAV_MERIO_NAVIGATION_QUATERNION">
+      <description>Attitude quaternion — Q1..Q4 components.</description>
+      <field type="float" name="Q1">Q1 component.</field>
+      <field type="float" name="Q2">Q2 component.</field>
+      <field type="float" name="Q3">Q3 component.</field>
+      <field type="float" name="Q4">Q4 component.</field>
+    </message>
+    <message id="65205" name="MAV_MERIO_NAVIGATION_RPY_GIMBAL">
+      <description>Gimbal Euler angles — roll/pitch/yaw in degrees.</description>
+      <field type="float" name="NAVROLL" units="deg">Roll angle.</field>
+      <field type="float" name="NAVPITCH" units="deg">Pitch angle.</field>
+      <field type="float" name="NAVYAW" units="deg">Yaw angle.</field>
+    </message>
+    <message id="65206" name="MAV_MERIO_NAVIGATION_BIAS_STATUS">
+      <description>Bias filter telemetry — estimated gyro biases and filter state.</description>
+      <field type="float" name="BIASGYROX" units="deg/s">Estimated bias on GX.</field>
+      <field type="float" name="BIASGYROY" units="deg/s">Estimated bias on GY.</field>
+      <field type="float" name="BIASGYROZ" units="deg/s">Estimated bias on GZ.</field>
+      <field type="uint32_t" name="BIASSTATUSFLAGS" enum="MAV_MERIO_BIAS_STATUS_FLAGS">Bias filter status flags.</field>
+    </message>
+
+    <!-- Status: GenericCamera -->
+    <!-- Status: DayCamera -->
+    <message id="65400" name="MAV_MERIO_DAY_CAMERA_ZOOM_INFO">
+      <description>Zoom status of camera 0</description>
+      <field type="float" name="FIELDOFVIEW" units="deg">Day camera horizontal field of view (HFOV). Smaller = more zoom.</field>
+      <field type="uint8_t" name="OPTICALZOOMLEVEL" units="percent">Optical zoom level of the day camera </field>
+      <field type="float" name="DIGITALZOOMLEVEL" units="ratio">Digital zoom factor applied on the day stream</field>
+      <field type="float" name="ZOOMRATIO">Total day zoom ratio (optical × digital)</field>
+    </message>
+    <message id="65401" name="MAV_MERIO_DAY_CAMERA_STATUS">
+      <description>Status of cam 0</description>
+      <field type="uint32_t" name="CAMSTATUS" enum="MAV_MERIO_DAY_CAM_STATUS">Day camera status flags.</field>
+      <field type="uint8_t" name="FOCUSMODE" enum="MAV_MERIO_DAY_FOCUS_MODE">Current focus mode.</field>
+    </message>
+    <message id="65402" name="MAV_MERIO_DAY_CAMERA_FOV_INFO">
+      <description>Day camera optical range and numeric zoom capability.</description>
+      <field type="float" name="DAYMAXOPT" units="deg">Day camera wide-angle optical FOV.</field>
+      <field type="float" name="DAYMINOPT" units="deg">Day camera tele-angle optical FOV.</field>
+      <field type="float" name="DAYNUMERICZOOM">Available day numeric zoom level.</field>
+      <field type="uint8_t" name="DAYVALID" enum="VALID_FLAG">Day FOV/numeric zoom validity flag.</field>
+    </message>
+
+    <!-- Status: NightCamera -->
+    <message id="65500" name="MAV_MERIO_NIGHT_CAMERA_ZOOM_INFO">
+      <description>Zoom status of camera 1</description>
+      <field type="float" name="FIELDOFVIEW" units="deg">Camera horizontal FOV</field>
+      <field type="uint8_t" name="OPTICALZOOMLEVEL" units="percent">Camera optical zoom level</field>
+      <field type="float" name="DIGITALZOOMLEVEL" units="ratio">Camera digital zoom ratio</field>
+      <field type="float" name="ZOOMRATIO">Camera zoom ratio</field>
+    </message>
+    <message id="65501" name="MAV_MERIO_NIGHT_CAMERA_STATUS">
+      <description>Status of cam 1</description>
+      <field type="uint8_t" name="PALETTE"/>
+      <field type="float" name="TEMPERATURE"/>
+    </message>
+    <message id="65502" name="MAV_MERIO_NIGHT_CAMERA_IMAGE_CONFIG">
+      <description>IR camera image configuration status</description>
+      <field type="uint8_t" name="MODE">Mode</field>
+      <field type="int8_t" name="BRIGHTNESS">Brightness</field>
+      <field type="uint8_t" name="CONTRAST">Contrast</field>
+      <field type="uint16_t" name="ENHANCEDCONTRAST">E-Contrast</field>
+      <field type="uint16_t" name="DISMISS">DISMISS</field>
+      <field type="uint8_t" name="CAMID"/>
+    </message>
+    <message id="65503" name="MAV_MERIO_NIGHT_CAMERA_FOV_INFO">
+      <description>Night camera optical range and numeric zoom capability.</description>
+      <field type="float" name="IRMAXOPT" units="deg">Night camera wide-angle optical FOV.</field>
+      <field type="float" name="IRMINOPT" units="deg">Night camera tele-angle optical FOV.</field>
+      <field type="float" name="IRNUMERICZOOM">Available night numeric zoom level.</field>
+      <field type="uint8_t" name="IRVALID" enum="VALID_FLAG">Night FOV/numeric zoom validity flag.</field>
+    </message>
+
+    <!-- Status: GenericLrf -->
+    <message id="65600" name="MAV_MERIO_GENERIC_LRF_LRF_RANGE_LIMITS">
+      <description>pointer ranges</description>
+      <field type="int16_t" name="MINRANGE">Configured minimum measurement distance</field>
+      <field type="int16_t" name="MAXRANGE">Configured maximum measurement distance</field>
+    </message>
+    <message id="65601" name="MAV_MERIO_GENERIC_LRF_LRF_LAST_MEASURE">
+      <description>pointer measured distance</description>
+      <field type="uint32_t" name="MEASUREDDISTANCE">The distance measured by the LRF.</field>
+    </message>
+
+    <!-- Status: GenericLaserPointer -->
+    <message id="65700" name="MAV_MERIO_GENERIC_LASER_POINTER_POINTER_STATUS">
+      <description>Current pointer configuration and capability flags.</description>
+      <field type="uint8_t" name="MODE">Active operating mode (echo of command; system-specific code).</field>
+      <field type="uint8_t" name="POWER">Active output power/level (0..100).</field>
+      <field type="uint32_t" name="POINTERFLAGS" enum="MAV_MERIO_POINTER_FLAGS">Pointer flags.</field>
+    </message>
+
+    <!-- Status: LaserStriker -->
+    <message id="65800" name="MAV_MERIO_LASER_STRIKER_PULSE_CODE_RETURN">
+      <description>Desired pulse code return.</description>
+      <field type="uint32_t" name="PULSECODERETURN">Desired pulse code return.</field>
+    </message>
+    <message id="65801" name="MAV_MERIO_LASER_STRIKER_INFO">
+      <description>Firmware and serial number.</description>
+      <field type="uint8_t" name="SN0">Serial number byte 0.</field>
+      <field type="uint8_t" name="SN1">Serial number byte 1.</field>
+      <field type="uint8_t" name="FV0">Firmware version byte 0.</field>
+      <field type="uint8_t" name="FV1">Firmware version byte 1.</field>
+      <field type="uint8_t" name="FV2">Firmware version byte 2.</field>
+      <field type="uint8_t" name="FV3">Firmware version byte 3.</field>
+    </message>
+    <message id="65802" name="MAV_MERIO_LASER_STRIKER_STATUS">
+      <description>Status of the striker.</description>
+      <field type="uint8_t" name="INNERSTATUS0">Inner status 0.</field>
+      <field type="uint8_t" name="INNERSTATUS1">Inner status 1.</field>
+      <field type="uint32_t" name="STATUSFLAGS" enum="MAV_MERIO_STRIKER_STATUS_FLAGS">Laser striker status flags.</field>
+      <field type="uint8_t" name="ERRORCODE">Error code.</field>
+      <field type="uint8_t" name="TIMEOUT" units="s">Firing timeout.</field>
+    </message>
+  </messages>
+</mavlink>
