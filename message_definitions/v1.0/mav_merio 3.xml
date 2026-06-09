@@ -786,6 +786,29 @@
       </entry>
     </enum>
 
+    <enum name="ENABLE_FLAG">
+      <description>Generic enable/disable flag.</description>
+      <entry value="0" name="DISENABLE"/>
+      <entry value="1" name="ENABLE"/>
+    </enum>
+
+    <enum name="VALID_FLAG">
+      <description>Generic valid/invalid flag.</description>
+      <entry value="0" name="INVALID"/>
+      <entry value="1" name="VALID"/>
+    </enum>
+
+    <enum name="CAMERA_ID">
+      <description>Camera ID.</description>
+      <entry value="0" name="CAMERA_ID_0"/>
+      <entry value="1" name="CAMERA_ID_1"/>
+      <entry value="2" name="CAMERA_ID_2"/>
+      <entry value="3" name="CAMERA_ID_3"/>
+      <entry value="4" name="CAMERA_ID_4"/>
+      <entry value="5" name="CAMERA_ID_5"/>
+      <entry value="6" name="CAMERA_ID_6"/>
+      <entry value="7" name="CAMERA_ID_7"/>
+    </enum>
   </enums>
 
   <messages>
@@ -803,13 +826,13 @@
     <message id="64001" name="MAV_MERIO_VISION_MAX_ENABLE_DETECTION_ALGO_MSG">
       <description>Enable/disable detection algorithm with name.</description>
       <field type="uint8_t" name="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</field>
-      <field type="uint8_t" name="DETECTIONENABLED" minValue="0" maxValue="1">Detection algorithm state.</field>
+      <field type="uint8_t" name="DETECTIONENABLED" enum="ENABLE_FLAG">Detection algorithm state.</field>
       <field type="char[32]" name="ALGORITHMNAME">Name of the detection algorithm.</field>
     </message>
     <message id="64002" name="MAV_MERIO_VISION_MAX_ENABLE_STABILIZATION_ALGO_MSG">
       <description>Enable/disable stabilization algorithm with name.</description>
       <field type="uint8_t" name="TARGETCAMMASK" enum="MAV_MERIO_CAMERA_MASK">Camera selection mask.</field>
-      <field type="uint8_t" name="STABILIZATION" minValue="0" maxValue="1">Stabilization algorithm state.</field>
+      <field type="uint8_t" name="STABILIZATION" enum="ENABLE_FLAG">Stabilization algorithm state.</field>
       <field type="char[32]" name="ALGORITHMNAME">Name of the stabilization algorithm.</field>
     </message>
     <message id="64003" name="MAV_MERIO_VISION_MAX_SET_NETWORK_CONFIGURATION_MSG">
@@ -820,7 +843,7 @@
     </message>
     <message id="64004" name="MAV_MERIO_VISION_MAX_SET_STREAMING_PARAMS_MSG">
       <description>Configure streaming server parameters.</description>
-      <field type="uint8_t" name="CAMID" minValue="0" maxValue="7">Camera id.</field>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
       <field type="char[16]" name="PROTOCOL">Protocol (rtsp/rtp/udp/http).</field>
       <field type="char[16]" name="MODE">Mode (unicast/multicast).</field>
       <field type="char[16]" name="CODEC">Codec (h264/h265).</field>
@@ -841,14 +864,14 @@
     </message>
     <message id="64005" name="MAV_MERIO_VISION_MAX_SET_STREAMING_ENCODER_MSG">
       <description>Configure bitrate/profile/preset (runtime, -1=unchanged).</description>
-      <field type="uint8_t" name="CAMID" minValue="0" maxValue="7">Camera id.</field>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
       <field type="int32_t" name="BITRATE">Bitrate (-1=unchanged).</field>
       <field type="int32_t" name="PRESETLEVEL">Preset level (-1=unchanged).</field>
       <field type="int32_t" name="ENCODERPROFILE">Encoder profile (-1=unchanged).</field>
     </message>
     <message id="64006" name="MAV_MERIO_VISION_MAX_SET_STREAMING_INTERVALS_MSG">
       <description>Configure MPEG-TS intervals (runtime, -1=unchanged).</description>
-      <field type="uint8_t" name="CAMID" minValue="0" maxValue="7">Camera id.</field>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
       <field type="int32_t" name="IFRAMEINTERVAL">I-frame interval (-1=unchanged).</field>
       <field type="int32_t" name="IDRINTERVAL">IDR interval (-1=unchanged).</field>
       <field type="int32_t" name="TSPATINTERVAL">MPEG-TS PAT interval (-1=unchanged).</field>
@@ -857,7 +880,7 @@
     </message>
     <message id="64007" name="MAV_MERIO_VISION_MAX_SET_STREAMING_ENDPOINT_MSG">
       <description>Configure endpoint/mode/protocol/codec (runtime, empty=unchanged).</description>
-      <field type="uint8_t" name="CAMID" minValue="0" maxValue="7">Camera id.</field>
+      <field type="uint8_t" name="CAMID" enum="CAMERA_ID">Camera id.</field>
       <field type="char[16]" name="PROTOCOL">Protocol (empty=unchanged).</field>
       <field type="char[16]" name="MODE">Mode (empty=unchanged).</field>
       <field type="char[16]" name="CODEC">Codec (empty=unchanged).</field>
@@ -1095,7 +1118,7 @@
       <field type="float" name="DAYMAXOPT" units="deg">Day camera wide-angle optical FOV.</field>
       <field type="float" name="DAYMINOPT" units="deg">Day camera tele-angle optical FOV.</field>
       <field type="float" name="DAYNUMERICZOOM">Available day numeric zoom level.</field>
-      <field type="uint8_t" name="DAYVALID" minValue="0" maxValue="1">Day FOV/numeric zoom validity flag.</field>
+      <field type="uint8_t" name="DAYVALID" enum="VALID_FLAG">Day FOV/numeric zoom validity flag.</field>
     </message>
 
     <!-- Status: NightCamera -->
@@ -1125,7 +1148,7 @@
       <field type="float" name="IRMAXOPT" units="deg">Night camera wide-angle optical FOV.</field>
       <field type="float" name="IRMINOPT" units="deg">Night camera tele-angle optical FOV.</field>
       <field type="float" name="IRNUMERICZOOM">Available night numeric zoom level.</field>
-      <field type="uint8_t" name="IRVALID" minValue="0" maxValue="1">Night FOV/numeric zoom validity flag.</field>
+      <field type="uint8_t" name="IRVALID" enum="VALID_FLAG">Night FOV/numeric zoom validity flag.</field>
     </message>
 
     <!-- Status: GenericLrf -->
