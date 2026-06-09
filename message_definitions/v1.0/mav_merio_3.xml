@@ -528,6 +528,30 @@
       </entry>
     </enum>
 
+    <enum name="ENABLE_FLAG">
+      <description>Generic enable/disable flag.</description>
+      <entry value="0" name="ENABLE_FLAG_DISABLE"/>
+      <entry value="1" name="ENABLE_FLAG_ENABLE"/>
+    </enum>
+
+    <enum name="VALID_FLAG">
+      <description>Generic valid/invalid flag.</description>
+      <entry value="0" name="VALID_FLAG_INVALID"/>
+      <entry value="1" name="VALID_FLAG_VALID"/>
+    </enum>
+
+    <enum name="CAMERA_ID">
+      <description>Camera ID.</description>
+      <entry value="0" name="CAMERA_ID_0"/>
+      <entry value="1" name="CAMERA_ID_1"/>
+      <entry value="2" name="CAMERA_ID_2"/>
+      <entry value="3" name="CAMERA_ID_3"/>
+      <entry value="4" name="CAMERA_ID_4"/>
+      <entry value="5" name="CAMERA_ID_5"/>
+      <entry value="6" name="CAMERA_ID_6"/>
+      <entry value="7" name="CAMERA_ID_7"/>
+    </enum>
+
     <enum name="MAV_CMD">
       <!-- Commands: VisionMax -->
       <entry value="60000" name="MAV_CMD_MERIO_VISION_MAX_ENABLE_FOLLOW_ME_MODE">
@@ -784,30 +808,6 @@
         <description>Set keep-alive timeout used to control firing timeout behavior.</description>
         <param index="1" label="TIMEOUT" units="s" minValue="0.1" maxValue="1">Keep-alive timeout (0.1 s step, protocol range 1..10).</param>
       </entry>
-    </enum>
-
-    <enum name="ENABLE_FLAG">
-      <description>Generic enable/disable flag.</description>
-      <entry value="0" name="DISENABLE"/>
-      <entry value="1" name="ENABLE"/>
-    </enum>
-
-    <enum name="VALID_FLAG">
-      <description>Generic valid/invalid flag.</description>
-      <entry value="0" name="INVALID"/>
-      <entry value="1" name="VALID"/>
-    </enum>
-
-    <enum name="CAMERA_ID">
-      <description>Camera ID.</description>
-      <entry value="0" name="CAMERA_ID_0"/>
-      <entry value="1" name="CAMERA_ID_1"/>
-      <entry value="2" name="CAMERA_ID_2"/>
-      <entry value="3" name="CAMERA_ID_3"/>
-      <entry value="4" name="CAMERA_ID_4"/>
-      <entry value="5" name="CAMERA_ID_5"/>
-      <entry value="6" name="CAMERA_ID_6"/>
-      <entry value="7" name="CAMERA_ID_7"/>
     </enum>
   </enums>
 
