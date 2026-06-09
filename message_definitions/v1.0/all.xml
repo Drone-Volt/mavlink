@@ -39,17 +39,11 @@
     commands: 50000 - 50099
   -->
   <include>cubepilot.xml</include>
+  <include>csAirLink.xml</include>
   <!-- csAirLink.xml range of IDs:
     messages: 52000 - 52099
     commands: 52000 - 52099
   -->
-  <include>csAirLink.xml</include>
-  <!-- mav_merio 3.xml range of IDs:
-    messages: 64000 - 64099
-    messages: 65000 - 65899
-    commands: 60000 - 60899
-  -->
-  <include>mav_merio 3.xml</include>
   <!--Next range to allocate range of IDs:
     messages: 52100 - ? < 60000
     commands: 52100 - ? < 60000
